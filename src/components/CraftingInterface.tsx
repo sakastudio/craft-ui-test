@@ -93,6 +93,8 @@ function CraftingInterface() {
           items={items}
           inventory={inventory}
           onCraft={handleCraft}
+          onSelectRecipe={setSelectedRecipe}
+          recipes={recipes}
         />
       </div>
       <div className="column recipe-column">

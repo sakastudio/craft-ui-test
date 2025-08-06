@@ -7,9 +7,11 @@ interface CraftingAreaProps {
   items: Item[];
   inventory: InventoryItem[];
   onCraft: () => void;
+  onSelectRecipe: (recipe: CraftRecipe) => void;
+  recipes: CraftRecipe[];
 }
 
-function CraftingArea({ selectedRecipe, items, inventory, onCraft }: CraftingAreaProps) {
+function CraftingArea({ selectedRecipe, items, inventory, onCraft, onSelectRecipe, recipes }: CraftingAreaProps) {
   const getItemById = (itemGuid: string) => {
     return items.find(item => item.itemGuid === itemGuid);
   };
@@ -20,6 +22,13 @@ function CraftingArea({ selectedRecipe, items, inventory, onCraft }: CraftingAre
       const invItem = inventory.find(inv => inv.item.itemGuid === req.itemGuid);
       return invItem && invItem.count >= req.count;
     });
+  };
+
+  const handleMaterialClick = (itemGuid: string) => {
+    const recipe = recipes.find(r => r.craftResultItemGuid === itemGuid);
+    if (recipe) {
+      onSelectRecipe(recipe);
+    }
   };
 
   if (!selectedRecipe) {
@@ -49,13 +58,18 @@ function CraftingArea({ selectedRecipe, items, inventory, onCraft }: CraftingAre
             const hasEnough = invItem && invItem.count >= req.count;
             
             return (
-              <ItemSlot
-                key={index}
-                itemName={item?.name}
-                count={req.count}
-                size="large"
-                variant={hasEnough ? 'default' : 'insufficient'}
-              />
+              <div 
+                key={index} 
+                onClick={() => handleMaterialClick(req.itemGuid)}
+                style={{ cursor: 'pointer' }}
+              >
+                <ItemSlot
+                  itemName={item?.name}
+                  count={req.count}
+                  size="large"
+                  variant={hasEnough ? 'default' : 'insufficient'}
+                />
+              </div>
             );
           })}
         </div>
