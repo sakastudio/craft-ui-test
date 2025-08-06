@@ -46,6 +46,19 @@ function CraftingInterface() {
       });
   }, []);
 
+  const handleAddItem = (item: Item, count: number) => {
+    const newInventory = [...inventory];
+    const existingItem = newInventory.find(inv => inv.item.itemGuid === item.itemGuid);
+    
+    if (existingItem) {
+      existingItem.count = Math.min(existingItem.count + count, item.maxStack);
+    } else {
+      newInventory.push({ item, count: Math.min(count, item.maxStack) });
+    }
+    
+    setInventory(newInventory);
+  };
+
   const handleCraft = () => {
     if (!selectedRecipe) return;
 
@@ -84,7 +97,7 @@ function CraftingInterface() {
     <div className="crafting-interface">
       <div className="column inventory-column">
         <h2>持ち物</h2>
-        <Inventory inventory={inventory} />
+        <Inventory inventory={inventory} items={items} onAddItem={handleAddItem} />
       </div>
       <div className="column crafting-column">
         <h2>木材</h2>
