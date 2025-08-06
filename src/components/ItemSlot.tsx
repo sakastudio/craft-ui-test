@@ -63,9 +63,6 @@ const ItemSlot: React.FC<ItemSlotProps> = ({
             <img 
               src={getItemIcon(itemName)} 
               alt={itemName}
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
             />
             {count !== undefined && count > 0 && (
               <span className="item-slot__count">{count}</span>
