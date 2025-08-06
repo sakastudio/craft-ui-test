@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ItemSlot.css';
 
 interface ItemSlotProps {
@@ -18,44 +18,75 @@ const ItemSlot: React.FC<ItemSlotProps> = ({
   onClick,
   className = ''
 }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const getItemIcon = (name: string) => {
-    const iconMap: { [key: string]: string } = {
-      '小石': '小石.png',
-      '石器': '石器.png',
-      '木の枝': '木の枝.png',
-      '麻': '麻.png',
-      '麻縄': '麻縄.png',
-      '石の斧': '石の斧.png',
-      '石のツルハシ': '石のツルハシ.png',
-      '原木': '原木.png',
-      '木材': '木材.png',
-      '砂': '砂.png',
-      '石炭': '石炭.png',
-      '鉄鉱石': '鉄鉱石.png',
-    };
-    return `/mod/assets/item/${iconMap[name] || 'default.png'}`;
+    return `/mod/assets/item/${name + '.png'}`;
+  };
+
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    if (itemName) {
+      setShowTooltip(true);
+      const rect = e.currentTarget.getBoundingClientRect();
+      setTooltipPosition({
+        x: rect.left + rect.width / 2,
+        y: rect.top - 10
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (showTooltip && itemName) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      setTooltipPosition({
+        x: rect.left + rect.width / 2,
+        y: rect.top - 10
+      });
+    }
   };
 
   return (
-    <div 
-      className={`item-slot item-slot--${size} item-slot--${variant} ${className}`}
-      onClick={onClick}
-    >
-      {itemName && (
-        <>
-          <img 
-            src={getItemIcon(itemName)} 
-            alt={itemName}
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = 'none';
-            }}
-          />
-          {count !== undefined && count > 0 && (
-            <span className="item-slot__count">{count}</span>
-          )}
-        </>
+    <>
+      <div 
+        className={`item-slot item-slot--${size} item-slot--${variant} ${className}`}
+        onClick={onClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onMouseMove={handleMouseMove}
+      >
+        {itemName && (
+          <>
+            <img 
+              src={getItemIcon(itemName)} 
+              alt={itemName}
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+            {count !== undefined && count > 0 && (
+              <span className="item-slot__count">{count}</span>
+            )}
+          </>
+        )}
+      </div>
+      {showTooltip && itemName && (
+        <div 
+          className="item-tooltip"
+          style={{
+            position: 'fixed',
+            left: `${tooltipPosition.x}px`,
+            top: `${tooltipPosition.y}px`,
+            transform: 'translate(-50%, -100%)',
+          }}
+        >
+          {itemName}
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
