@@ -9,7 +9,6 @@ export interface Item {
   name: string;
   maxStack: number;
   iconPath?: string;
-  initialUnlocked?: boolean;
 }
 
 export interface InventoryItem {
@@ -23,7 +22,6 @@ export interface CraftRecipe {
   craftResultCount: number;
   requiredItems: { itemGuid: string; count: number; }[];
   craftTime: number;
-  initialUnlocked?: boolean;
 }
 
 function CraftingInterface() {
@@ -37,16 +35,14 @@ function CraftingInterface() {
       .then(res => res.json())
       .then(data => {
         setItems(data.data);
-        const initialInventory: InventoryItem[] = data.data
-          .filter((item: Item) => item.initialUnlocked)
-          .map((item: Item) => ({ item, count: 10 }));
+        const initialInventory: InventoryItem[] = [];
         setInventory(initialInventory);
       });
 
     fetch('/mod/master/craftRecipes.json')
       .then(res => res.json())
       .then(data => {
-        setRecipes(data.data.filter((recipe: any) => recipe.initialUnlocked));
+        setRecipes(data.data);
       });
   }, []);
 
