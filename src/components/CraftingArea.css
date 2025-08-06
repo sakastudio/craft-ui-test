@@ -1,0 +1,147 @@
+.crafting-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.recipe-label {
+  background-color: #4a8cc8;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  width: fit-content;
+}
+
+.recipe-display {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 30px;
+  background-color: #1a1a1a;
+  border: 3px solid #4a8cc8;
+  border-radius: 8px;
+  min-height: 120px;
+}
+
+.recipe-placeholder {
+  color: #888;
+  font-size: 16px;
+  text-align: center;
+  padding: 40px;
+}
+
+.recipe-materials {
+  display: flex;
+  gap: 10px;
+}
+
+.material-slot {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background-color: #3a3a3a;
+  border: 2px solid #555;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.material-slot.insufficient {
+  border-color: #c84a4a;
+  background-color: rgba(200, 74, 74, 0.1);
+}
+
+.material-slot img {
+  width: 44px;
+  height: 44px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.material-count {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  color: #000000;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.recipe-arrow {
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.recipe-result {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background-color: #3a3a3a;
+  border: 3px solid #4ac84a;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(74, 200, 74, 0.3);
+}
+
+.recipe-result img {
+  width: 60px;
+  height: 60px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.result-count {
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  color: #000000;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.craft-time {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.craft-button {
+  background-color: #4a8cc8;
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.2s ease;
+}
+
+.craft-button:hover:not(:disabled) {
+  background-color: #5a9cd8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(74, 140, 200, 0.4);
+}
+
+.craft-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.craft-button:disabled {
+  background-color: #3a3a3a;
+  color: #666;
+  cursor: not-allowed;
+}
