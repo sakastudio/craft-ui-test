@@ -1,5 +1,6 @@
 import type { CraftRecipe, Item } from './CraftingInterface';
 import './RecipeList.css';
+import ItemSlot from './ItemSlot';
 
 interface RecipeListProps {
   recipes: CraftRecipe[];
@@ -9,24 +10,6 @@ interface RecipeListProps {
 }
 
 function RecipeList({ recipes, items, onSelectRecipe, selectedRecipe }: RecipeListProps) {
-  const getItemIcon = (itemName: string) => {
-    const iconMap: { [key: string]: string } = {
-      '小石': '小石.png',
-      '石器': '石器.png',
-      '木の枝': '木の枝.png',
-      '麻': '麻.png',
-      '麻縄': '麻縄.png',
-      '石の斧': '石の斧.png',
-      '石のツルハシ': '石のツルハシ.png',
-      '原木': '原木.png',
-      '木材': '木材.png',
-      '砂': '砂.png',
-      '石炭': '石炭.png',
-      '鉄鉱石': '鉄鉱石.png',
-    };
-    return `/mod/assets/item/${iconMap[itemName] || 'default.png'}`;
-  };
-
   const getItemById = (itemGuid: string) => {
     return items.find(item => item.itemGuid === itemGuid);
   };
@@ -39,20 +22,14 @@ function RecipeList({ recipes, items, onSelectRecipe, selectedRecipe }: RecipeLi
           if (!resultItem) return null;
           
           return (
-            <div 
+            <ItemSlot
               key={recipe.craftRecipeGuid}
-              className={`recipe-item ${selectedRecipe?.craftRecipeGuid === recipe.craftRecipeGuid ? 'selected' : ''}`}
+              itemName={resultItem.name}
+              count={recipe.craftResultCount}
+              variant="recipe"
+              className={selectedRecipe?.craftRecipeGuid === recipe.craftRecipeGuid ? 'selected' : ''}
               onClick={() => onSelectRecipe(recipe)}
-            >
-              <img 
-                src={getItemIcon(resultItem.name)} 
-                alt={resultItem.name}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
-              />
-              <span className="recipe-count">{recipe.craftResultCount}</span>
-            </div>
+            />
           );
         })}
       </div>
