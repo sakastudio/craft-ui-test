@@ -31,19 +31,23 @@ function CraftingInterface() {
   const [selectedRecipe, setSelectedRecipe] = useState<CraftRecipe | null>(null);
 
   useEffect(() => {
-    fetch('/mod/master/items.json')
+    const basePath = import.meta.env.BASE_URL;
+    
+    fetch(`${basePath}mod/master/items.json`)
       .then(res => res.json())
       .then(data => {
         setItems(data.data);
         const initialInventory: InventoryItem[] = [];
         setInventory(initialInventory);
-      });
+      })
+      .catch(err => console.error('Failed to load items:', err));
 
-    fetch('/mod/master/craftRecipes.json')
+    fetch(`${basePath}mod/master/craftRecipes.json`)
       .then(res => res.json())
       .then(data => {
         setRecipes(data.data);
-      });
+      })
+      .catch(err => console.error('Failed to load recipes:', err));
   }, []);
 
   const handleAddItem = (item: Item, count: number) => {
