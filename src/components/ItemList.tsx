@@ -9,7 +9,7 @@ interface ItemListProps {
 }
 
 function ItemList({ items, onAddItem }: ItemListProps) {
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(20);
 
   const handleItemClick = (item: Item) => {
     onAddItem(item, quantity);
@@ -39,7 +39,7 @@ function ItemList({ items, onAddItem }: ItemListProps) {
               itemName={item.name}
               count={1}
               size="medium"
-              variant="clickable"
+              variant="default"
             />
           </div>
         ))}

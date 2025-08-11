@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ItemSlot.css';
+import { getItemIcon } from '../utils/assetPath';
 
 interface ItemSlotProps {
   itemName?: string;
@@ -20,9 +21,6 @@ const ItemSlot: React.FC<ItemSlotProps> = ({
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-  const getItemIcon = (name: string) => {
-    return `/mod/assets/item/${name + '.png'}`;
-  };
 
   const handleMouseEnter = (e: React.MouseEvent) => {
     if (itemName) {

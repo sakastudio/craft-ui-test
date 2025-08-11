@@ -32,7 +32,7 @@
 
 .item-list-grid {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 4px;
   max-height: 300px;
   overflow-y: auto;
