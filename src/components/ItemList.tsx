@@ -39,7 +39,7 @@ function ItemList({ items, onAddItem }: ItemListProps) {
               itemName={item.name}
               count={1}
               size="medium"
-              variant="clickable"
+              variant="default"
             />
           </div>
         ))}
