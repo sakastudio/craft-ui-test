@@ -1,6 +1,7 @@
 import './CraftingArea.css';
 import type {CraftRecipe, InventoryItem, Item} from "./CraftingInterface.tsx";
 import ItemSlot from './ItemSlot';
+import { useState, useEffect, useRef } from 'react';
 
 interface CraftingAreaProps {
   selectedRecipe: CraftRecipe | null;
@@ -12,6 +13,13 @@ interface CraftingAreaProps {
 }
 
 function CraftingArea({ selectedRecipe, items, inventory, onCraft, onSelectRecipe, recipes }: CraftingAreaProps) {
+  const [isHolding, setIsHolding] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const holdTimerRef = useRef<number | null>(null);
+  const progressIntervalRef = useRef<number | null>(null);
+  const CRAFT_DURATION = 1000; // 1秒
+  const PROGRESS_UPDATE_INTERVAL = 10; // 10msごとに更新
+
   const getItemById = (itemGuid: string) => {
     return items.find(item => item.itemGuid === itemGuid);
   };
@@ -31,6 +39,50 @@ function CraftingArea({ selectedRecipe, items, inventory, onCraft, onSelectRecip
     }
   };
 
+  const startCrafting = () => {
+    if (!canCraft()) return;
+    
+    setIsHolding(true);
+    setProgress(0);
+    
+    // プログレスバーの更新
+    let elapsed = 0;
+    progressIntervalRef.current = setInterval(() => {
+      elapsed += PROGRESS_UPDATE_INTERVAL;
+      const newProgress = Math.min((elapsed / CRAFT_DURATION) * 100, 100);
+      setProgress(newProgress);
+    }, PROGRESS_UPDATE_INTERVAL);
+    
+    // クラフト実行タイマー
+    holdTimerRef.current = setTimeout(() => {
+      onCraft();
+      stopCrafting();
+    }, CRAFT_DURATION);
+  };
+
+  const stopCrafting = () => {
+    setIsHolding(false);
+    setProgress(0);
+    
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+    
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+  };
+
+  // コンポーネントがアンマウントされた時のクリーンアップ
+  useEffect(() => {
+    return () => {
+      if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    };
+  }, []);
+
   if (!selectedRecipe) {
     return (
       <div className="crafting-area">
@@ -39,9 +91,11 @@ function CraftingArea({ selectedRecipe, items, inventory, onCraft, onSelectRecip
             レシピを選択してください
           </div>
         </div>
-        <button className="craft-button" disabled>
-          CRAFT
-        </button>
+        <div className="craft-controls">
+          <button className="craft-button" disabled>
+            CRAFT
+          </button>
+        </div>
       </div>
     );
   }
@@ -81,13 +135,28 @@ function CraftingArea({ selectedRecipe, items, inventory, onCraft, onSelectRecip
         />
       </div>
       <div className="craft-time">1秒</div>
-      <button 
-        className="craft-button" 
-        onClick={onCraft}
-        disabled={!canCraft()}
-      >
-        CRAFT
-      </button>
+      <div className="craft-controls">
+        {isHolding && (
+          <div className="progress-bar">
+            <div 
+              className="progress-fill" 
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        )}
+        <button 
+          className="craft-button" 
+          onMouseDown={startCrafting}
+          onMouseUp={stopCrafting}
+          onMouseLeave={stopCrafting}
+          onTouchStart={startCrafting}
+          onTouchEnd={stopCrafting}
+          onTouchCancel={stopCrafting}
+          disabled={!canCraft()}
+        >
+          {isHolding ? 'CRAFTING...' : 'CRAFT'}
+        </button>
+      </div>
     </div>
   );
 }

@@ -79,3 +79,30 @@
   color: #666;
   cursor: not-allowed;
 }
+
+.craft-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 200px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #2a2a2a;
+  border: 1px solid #4a8cc8;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4a8cc8, #6aacf8);
+  transition: width 0.01s linear;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(74, 140, 200, 0.5);
+}
