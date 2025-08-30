@@ -1,7 +1,8 @@
 import './StackedRecipeItem.css';
-import type {CraftRecipe, InventoryItem, Item} from "./CraftingInterface.tsx";
+import type {CraftRecipe, InventoryItem, Item} from "../types";
 import ItemSlot from './ItemSlot';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { RecipeCalculator } from '../utils/recipeCalculator';
 
 interface StackedRecipeItemProps {
   recipe: CraftRecipe;
@@ -36,6 +37,10 @@ function StackedRecipeItem({
   const getItemById = (itemGuid: string) => {
     return items.find(item => item.itemGuid === itemGuid);
   };
+
+  const calculator = useMemo(() => {
+    return new RecipeCalculator(recipes, items);
+  }, [recipes, items]);
 
   const canCraft = () => {
     if (!recipe) return false;
@@ -111,6 +116,12 @@ function StackedRecipeItem({
             const invItem = inventory.find(inv => inv.item.itemGuid === req.itemGuid);
             const hasEnough = invItem && invItem.count >= req.count;
             
+            // その材料アイテムのレシピがある場合、原材料を計算
+            const materialRecipe = recipes.find(r => r.craftResultItemGuid === req.itemGuid);
+            const materialCalculation = materialRecipe ? 
+              calculator.calculateRawMaterials(materialRecipe.craftRecipeGuid) : 
+              null;
+            
             return (
               <div 
                 key={index} 
@@ -122,6 +133,8 @@ function StackedRecipeItem({
                   count={req.count}
                   size="medium"
                   variant={hasEnough ? 'default' : 'insufficient'}
+                  rawMaterials={materialCalculation?.rawMaterials}
+                  getItemName={(itemGuid) => calculator.getItemName(itemGuid)}
                 />
               </div>
             );
@@ -136,6 +149,8 @@ function StackedRecipeItem({
             count={recipe.craftResultCount}
             variant="result"
             size="medium"
+            rawMaterials={calculator.calculateRawMaterials(recipe.craftRecipeGuid).rawMaterials}
+            getItemName={(itemGuid) => calculator.getItemName(itemGuid)}
           />
         </div>
       </div>

@@ -1,6 +1,8 @@
-import type { CraftRecipe, Item } from './CraftingInterface';
+import type { CraftRecipe, Item } from '../types';
 import './RecipeList.css';
 import ItemSlot from './ItemSlot';
+import { RecipeCalculator } from '../utils/recipeCalculator';
+import { useMemo } from 'react';
 
 interface RecipeListProps {
   recipes: CraftRecipe[];
@@ -14,12 +16,18 @@ function RecipeList({ recipes, items, onSelectRecipe, selectedRecipe }: RecipeLi
     return items.find(item => item.itemGuid === itemGuid);
   };
 
+  const calculator = useMemo(() => {
+    return new RecipeCalculator(recipes, items);
+  }, [recipes, items]);
+
   return (
     <div className="recipe-list">
       <div className="recipe-grid">
         {recipes.map(recipe => {
           const resultItem = getItemById(recipe.craftResultItemGuid);
           if (!resultItem) return null;
+          
+          const calculationResult = calculator.calculateRawMaterials(recipe.craftRecipeGuid);
           
           return (
             <ItemSlot
@@ -29,6 +37,8 @@ function RecipeList({ recipes, items, onSelectRecipe, selectedRecipe }: RecipeLi
               variant="recipe"
               className={selectedRecipe?.craftRecipeGuid === recipe.craftRecipeGuid ? 'selected' : ''}
               onClick={() => onSelectRecipe(recipe)}
+              rawMaterials={calculationResult.rawMaterials}
+              getItemName={(itemGuid) => calculator.getItemName(itemGuid)}
             />
           );
         })}

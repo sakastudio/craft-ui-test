@@ -15,7 +15,7 @@ export interface CraftRecipe {
   craftRecipeGuid: string;
   craftResultItemGuid: string;
   craftResultCount: number;
-  requiredItems: { itemGuid: string; count: number; }[];
+  requiredItems: { itemGuid: string; count: number; isRemain?: boolean; }[];
   craftTime: number;
   initialUnlocked?: boolean;
 }

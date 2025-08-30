@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ItemSlot.css';
 import { getItemIcon } from '../utils/assetPath';
+import type { MaterialRequirement } from '../utils/recipeCalculator';
 
 interface ItemSlotProps {
   itemName?: string;
@@ -9,6 +10,8 @@ interface ItemSlotProps {
   variant?: 'default' | 'insufficient' | 'result' | 'recipe';
   onClick?: () => void;
   className?: string;
+  rawMaterials?: MaterialRequirement[];
+  getItemName?: (itemGuid: string) => string;
 }
 
 const ItemSlot: React.FC<ItemSlotProps> = ({
@@ -17,7 +20,9 @@ const ItemSlot: React.FC<ItemSlotProps> = ({
   size = 'medium',
   variant = 'default',
   onClick,
-  className = ''
+  className = '',
+  rawMaterials,
+  getItemName
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -78,7 +83,22 @@ const ItemSlot: React.FC<ItemSlotProps> = ({
             transform: 'translate(-50%, -100%)',
           }}
         >
-          {itemName}
+          <div className="tooltip-title">{itemName}</div>
+          {rawMaterials && rawMaterials.length > 0 && (
+            <div className="tooltip-materials">
+              <div className="tooltip-materials-title">原材料トータル:</div>
+              <div className="tooltip-materials-list">
+                {rawMaterials.map((material, index) => (
+                  <div key={index} className="tooltip-material-item">
+                    {getItemName ? getItemName(material.itemGuid) : material.itemGuid} × {material.count}
+                  </div>
+                ))}
+              </div>
+              <div className="tooltip-total">
+                合計: {rawMaterials.reduce((total, material) => total + material.count, 0)}個
+              </div>
+            </div>
+          )}
         </div>
       )}
     </>
