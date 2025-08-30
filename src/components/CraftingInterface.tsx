@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Inventory from './Inventory';
-import CraftingArea from './CraftingArea';
+import RecipeStackArea from './RecipeStackArea';
 import RecipeList from './RecipeList';
 import './CraftingInterface.css';
 
@@ -28,7 +28,7 @@ function CraftingInterface() {
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [recipes, setRecipes] = useState<CraftRecipe[]>([]);
-  const [selectedRecipe, setSelectedRecipe] = useState<CraftRecipe | null>(null);
+  const [recipeStack, setRecipeStack] = useState<CraftRecipe[]>([]);
 
   useEffect(() => {
     const basePath = import.meta.env.BASE_URL;
@@ -63,10 +63,26 @@ function CraftingInterface() {
     setInventory(newInventory);
   };
 
-  const handleCraft = () => {
-    if (!selectedRecipe) return;
+  const handleAddToStack = (recipe: CraftRecipe) => {
+    setRecipeStack(prev => [...prev, recipe]);
+  };
 
-    const hasAllMaterials = selectedRecipe.requiredItems.every(req => {
+  const handleAddToStackAtPosition = (recipe: CraftRecipe, insertAfterIndex: number) => {
+    setRecipeStack(prev => {
+      const newStack = [...prev];
+      newStack.splice(insertAfterIndex + 1, 0, recipe);
+      return newStack;
+    });
+  };
+
+  const handleRemoveFromStack = (index: number) => {
+    setRecipeStack(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleCraft = (recipe: CraftRecipe) => {
+    if (!recipe) return;
+
+    const hasAllMaterials = recipe.requiredItems.every(req => {
       const invItem = inventory.find(inv => inv.item.itemGuid === req.itemGuid);
       return invItem && invItem.count >= req.count;
     });
@@ -77,20 +93,20 @@ function CraftingInterface() {
     }
 
     const newInventory = [...inventory];
-    selectedRecipe.requiredItems.forEach(req => {
+    recipe.requiredItems.forEach(req => {
       const invItem = newInventory.find(inv => inv.item.itemGuid === req.itemGuid);
       if (invItem) {
         invItem.count -= req.count;
       }
     });
 
-    const resultItem = items.find(item => item.itemGuid === selectedRecipe.craftResultItemGuid);
+    const resultItem = items.find(item => item.itemGuid === recipe.craftResultItemGuid);
     if (resultItem) {
       const existingItem = newInventory.find(inv => inv.item.itemGuid === resultItem.itemGuid);
       if (existingItem) {
-        existingItem.count += selectedRecipe.craftResultCount;
+        existingItem.count += recipe.craftResultCount;
       } else {
-        newInventory.push({ item: resultItem, count: selectedRecipe.craftResultCount });
+        newInventory.push({ item: resultItem, count: recipe.craftResultCount });
       }
     }
 
@@ -104,13 +120,15 @@ function CraftingInterface() {
         <Inventory inventory={inventory} items={items} onAddItem={handleAddItem} />
       </div>
       <div className="column crafting-column">
-        <h2>木材</h2>
-        <CraftingArea 
-          selectedRecipe={selectedRecipe}
+        <h2>クラフト</h2>
+        <RecipeStackArea 
+          recipeStack={recipeStack}
           items={items}
           inventory={inventory}
           onCraft={handleCraft}
-          onSelectRecipe={setSelectedRecipe}
+          onSelectRecipe={handleAddToStack}
+          onSelectRecipeFromMaterial={handleAddToStackAtPosition}
+          onRemoveFromStack={handleRemoveFromStack}
           recipes={recipes}
         />
       </div>
@@ -119,8 +137,8 @@ function CraftingInterface() {
         <RecipeList 
           recipes={recipes}
           items={items}
-          onSelectRecipe={setSelectedRecipe}
-          selectedRecipe={selectedRecipe}
+          onSelectRecipe={handleAddToStack}
+          selectedRecipe={null}
         />
       </div>
     </div>

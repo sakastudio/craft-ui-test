@@ -1,0 +1,175 @@
+.stacked-recipe-item {
+  background: linear-gradient(135deg, #2a2a3a 0%, #1e1e2e 100%);
+  border: 2px solid #444455;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  padding: 16px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.stacked-recipe-item:hover {
+  border-color: #6666aa;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.recipe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #444455;
+}
+
+.recipe-title {
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.remove-button {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.remove-button:hover {
+  background: #ff5252;
+}
+
+.recipe-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.recipe-materials {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.material-slot {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.material-slot:hover {
+  transform: scale(1.05);
+}
+
+.recipe-arrow {
+  font-size: 18px;
+  color: #888899;
+  font-weight: bold;
+  margin: 0 8px;
+}
+
+.recipe-result {
+  display: flex;
+  align-items: center;
+}
+
+.craft-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: #333344;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+  transition: width 0.1s ease-out;
+}
+
+.craft-button {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.craft-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.craft-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.craft-button.disabled {
+  background: linear-gradient(135deg, #666677 0%, #555566 100%);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.craft-button.craftable {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+  70% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+  100% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+/* スタック効果のための追加スタイル */
+.stacked-recipe-item:nth-child(1) {
+  z-index: 10;
+}
+
+.stacked-recipe-item:nth-child(2) {
+  z-index: 9;
+}
+
+.stacked-recipe-item:nth-child(3) {
+  z-index: 8;
+}
+
+.stacked-recipe-item:nth-child(4) {
+  z-index: 7;
+}
+
+.stacked-recipe-item:nth-child(5) {
+  z-index: 6;
+}

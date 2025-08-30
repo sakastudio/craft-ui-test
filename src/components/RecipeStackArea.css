@@ -1,0 +1,143 @@
+.recipe-stack-area {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 12px;
+  padding: 16px;
+  border: 2px solid #333355;
+}
+
+.stack-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #333355;
+}
+
+.stack-header h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.clear-stack-button {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.clear-stack-button:hover {
+  background: linear-gradient(135deg, #ff5252 0%, #ff4444 100%);
+  transform: translateY(-1px);
+}
+
+.recipe-stack {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-right: -8px;
+}
+
+.recipe-stack::-webkit-scrollbar {
+  width: 6px;
+}
+
+.recipe-stack::-webkit-scrollbar-track {
+  background: #1a1a2e;
+  border-radius: 3px;
+}
+
+.recipe-stack::-webkit-scrollbar-thumb {
+  background: #444466;
+  border-radius: 3px;
+}
+
+.recipe-stack::-webkit-scrollbar-thumb:hover {
+  background: #555577;
+}
+
+.stack-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #333355;
+}
+
+.stack-info {
+  color: #888899;
+  font-size: 12px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* プレースホルダー用スタイル */
+.stack-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666677;
+  text-align: center;
+}
+
+.placeholder-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.placeholder-text {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #777788;
+}
+
+.placeholder-subtext {
+  font-size: 14px;
+  color: #555566;
+  font-style: italic;
+}
+
+/* アニメーション */
+.recipe-stack-area {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .recipe-stack-area {
+    padding: 12px;
+  }
+  
+  .stack-header h3 {
+    font-size: 16px;
+  }
+  
+  .clear-stack-button {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+}
