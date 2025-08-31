@@ -99,6 +99,7 @@ function StackedRecipeItem({
   }, []);
 
   const resultItem = getItemById(recipe.craftResultItemGuid);
+  const recipeCalculation = calculator.calculateRawMaterials(recipe.craftRecipeGuid);
 
   return (
     <div className="stacked-recipe-item">
@@ -149,11 +150,33 @@ function StackedRecipeItem({
             count={recipe.craftResultCount}
             variant="result"
             size="medium"
-            rawMaterials={calculator.calculateRawMaterials(recipe.craftRecipeGuid).rawMaterials}
+            rawMaterials={recipeCalculation.rawMaterials}
             getItemName={(itemGuid) => calculator.getItemName(itemGuid)}
           />
         </div>
       </div>
+
+      {recipeCalculation.rawMaterials.length > 0 && (
+        <div className="raw-materials-section">
+          <div className="raw-materials-header">原材料</div>
+          <div className="raw-materials-list">
+            {recipeCalculation.rawMaterials.map((material, index) => {
+              const item = getItemById(material.itemGuid);
+              return (
+                <div key={index} className="raw-material-item">
+                  <ItemSlot
+                    itemName={item?.name}
+                    count={material.count}
+                    size="small"
+                    variant="default"
+                    getItemName={(itemGuid) => calculator.getItemName(itemGuid)}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
       
       <div className="craft-controls">
         {isHolding && (

@@ -173,3 +173,32 @@
 .stacked-recipe-item:nth-child(5) {
   z-index: 6;
 }
+
+/* 原材料セクション */
+.raw-materials-section {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #3a3a4a;
+}
+
+.raw-materials-header {
+  font-size: 12px;
+  color: #888899;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.raw-materials-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.raw-material-item {
+  display: flex;
+  align-items: center;
+}
